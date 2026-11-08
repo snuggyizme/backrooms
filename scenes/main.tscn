@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://cxyssw5qjwio1"]
+
+[ext_resource type="Script" uid="uid://bfw40ju0otw0f" path="res://scripts/procgen/worldController.gd" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://c0mlw2cydkj6s" path="res://scenes/playerCharacter.tscn" id="2_0wfyh"]
+
+[node name="Main" type="Node2D" unique_id=426283340]
+
+[node name="WorldController" type="Node" parent="." unique_id=2083038325 node_paths=PackedStringArray("player")]
+script = ExtResource("1_o5qli")
+player = NodePath("../PlayerCharacter")
+metadata/_custom_type_script = "uid://bfw40ju0otw0f"
+
+[node name="PlayerCharacter" parent="." unique_id=1585843019 instance=ExtResource("2_0wfyh")]

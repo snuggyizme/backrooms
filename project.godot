@@ -16,8 +16,19 @@ config/icon="res://icon.svg"
 
 [display]
 
+window/size/viewport_width=426
+window/size/viewport_height=240
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+
+[file_customization]
+
+folder_colors={
+"res://rooms/": "yellow",
+"res://scenes/": "orange",
+"res://scripts/": "purple",
+"res://sprites/": "green"
+}
 
 [physics]
 
@@ -25,4 +36,5 @@ window/stretch/aspect="expand"
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"

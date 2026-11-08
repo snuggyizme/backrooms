@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://jmp0vovfqy8c"]
+
+[ext_resource type="Script" uid="uid://c7unkel0hgsej" path="res://scripts/procgen/room.gd" id="1_0se5r"]
+[ext_resource type="Texture2D" uid="uid://bdwi8es5duos5" path="res://sprites/tiles.png" id="2_5uxwh"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_h4cji"]
+texture = ExtResource("2_5uxwh")
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_f4hcn"]
+sources/0 = SubResource("TileSetAtlasSource_h4cji")
+
+[node name="Room" type="Node2D" unique_id=1407029656]
+script = ExtResource("1_0se5r")
+metadata/_custom_type_script = "uid://c7unkel0hgsej"
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1214052913]
+tile_set = SubResource("TileSet_f4hcn")

@@ -22,15 +22,15 @@ var roomCache: Dictionary[Vector4i, Array] # Dictionary[Vector4i, Array[PackedSc
 
 
 func _ready() -> void:
-	cacheRoomConnections()
+	cacheRoomConnections(true, false, true)
 	randomizeSeed()
 
 func _process(_Δ: float) -> void:
 	# Get player position
 	var playerPos: Vector2 = player.global_position
 	var playerRoomPos := Vector2i(
-		floori(playerPos.x / C.DIMENSION.x),
-		floori(playerPos.y / C.DIMENSION.y),
+		floori(playerPos.x / (C.DIMENSION.x * C.TILE_DIMENSION.x)),
+		floori(playerPos.y / (C.DIMENSION.y * C.TILE_DIMENSION.y)),
 	)
 	
 	# Get rooms around player
@@ -66,8 +66,9 @@ func _process(_Δ: float) -> void:
 		var connections: Vector4i = validConnections[rng.randi() % validConnections.size()]
 		var roomScene: PackedScene = roomCache[connections][rng.randi() % roomCache[connections].size()]
 		var room: Room = roomScene.instantiate()
-		room.global_position = roomCoord * C.DIMENSION
+		room.global_position = roomCoord * C.DIMENSION * C.TILE_DIMENSION
 		add_child(room)
+		loadedRooms[roomCoord] = room
 
 func randomizeSeed() -> void:
 	randomize()
@@ -75,7 +76,7 @@ func randomizeSeed() -> void:
 	rng = RandomNumberGenerator.new()
 	rng.seed = worldSeed
 
-func cacheRoomConnections(addHidden: bool = false) -> void:
+func cacheRoomConnections(useFileName: bool = false, addHidden: bool = false, debugPrint: bool = false) -> void:
 	var dir := DirAccess.open(C.ROOM_DIR)
 	dir.list_dir_begin()
 	
@@ -86,12 +87,28 @@ func cacheRoomConnections(addHidden: bool = false) -> void:
 		if path.begins_with("_") and not addHidden:
 			continue
 		
+		# Get scene
 		var packed: PackedScene = load(C.ROOM_DIR + path)
 		
-		# Get data and free ( hate this typing thing )
-		var temp: Room = packed.instantiate()
-		var	connections: Vector4i = temp.connections
-		temp.free()
+		# Get connections
+		var connections: Vector4i
+		if useFileName:
+			var s: String = path.substr(0, 4)
+			connections = Vector4i( # Surely a better way? This is ugly.
+				s[0].to_int(),
+				s[1].to_int(),
+				s[2].to_int(),
+				s[3].to_int(),
+			)
+		else:
+			# Get data and free ( hate this typing thing )
+			var temp: Room = packed.instantiate()
+			
+			if debugPrint:
+				print("{WorldController}: Instantiated room ", temp.name)
+			
+			connections = temp.connections
+			temp.free()
 		
 		# Add to dictionary
 		if not roomCache.has(connections):

@@ -11,3 +11,4 @@ player = NodePath("../PlayerCharacter")
 metadata/_custom_type_script = "uid://bfw40ju0otw0f"
 
 [node name="PlayerCharacter" parent="." unique_id=1585843019 instance=ExtResource("2_0wfyh")]
+position = Vector2(163, 158)

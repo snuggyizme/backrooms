@@ -1,18 +1,27 @@
 [gd_scene format=3 uid="uid://jmp0vovfqy8c"]
 
 [ext_resource type="Script" uid="uid://c7unkel0hgsej" path="res://scripts/procgen/room.gd" id="1_0se5r"]
-[ext_resource type="Texture2D" uid="uid://bdwi8es5duos5" path="res://sprites/tiles.png" id="2_5uxwh"]
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_h4cji"]
-texture = ExtResource("2_5uxwh")
-0:0/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_f4hcn"]
-sources/0 = SubResource("TileSetAtlasSource_h4cji")
+[ext_resource type="TileSet" uid="uid://c56uer1mvaoap" path="res://resources/tileset.tres" id="2_0se5r"]
 
 [node name="Room" type="Node2D" unique_id=1407029656]
 script = ExtResource("1_0se5r")
 metadata/_custom_type_script = "uid://c7unkel0hgsej"
 
-[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1214052913]
-tile_set = SubResource("TileSet_f4hcn")
+[node name="ReferenceRect" type="ReferenceRect" parent="." unique_id=1172615352]
+offset_right = 512.0
+offset_bottom = 384.0
+border_color = Color(0.58802587, 0.3806756, 0.9904414, 1)
+border_width = 2.0
+metadata/_edit_lock_ = true
+
+[node name="Mid" type="TileMapLayer" parent="." unique_id=1214052913]
+z_index = 1000
+tile_set = ExtResource("2_0se5r")
+
+[node name="Back" type="TileMapLayer" parent="." unique_id=1794005736]
+z_index = -200
+tile_set = ExtResource("2_0se5r")
+
+[node name="Fore" type="TileMapLayer" parent="." unique_id=1857752967]
+z_index = 2000
+tile_set = ExtResource("2_0se5r")

@@ -5,5 +5,6 @@ Y = horizontal (x) / vertical (y) / either (a)
 ----------------------------------------------
 
 0a = none
-1x = 6 wide centred hallway
-1y = 2 wide centred shaft
+1x = 6 wide centred hallway (draw 9 on each side)
+1y = 2 wide centred shaft (draw 15 on each side)
+2x = 1 wide hallway, bottom of two centre options (draw 12 top, 11 bottom)

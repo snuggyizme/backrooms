@@ -1,6 +1,9 @@
 class_name C extends Node
 
 enum Dir { LEFT, RIGHT, UP, DOWN }
+enum Err {
+	ROOM_NO_FITTING_CONNECTIONS,
+}
 
 const DIMENSION := Vector2i(32, 24)
 const TILE_DIMENSION := Vector2i.ONE * 16
@@ -22,3 +25,4 @@ const GRAVITY: float = 170.0
 const AIR_X_MAX_SPEED_INCREASE: float = 1.25
 const OVERSPEED_DECEL: float = 300.0
 const FLY_SPEED: float = 600.0
+const ERR_ROOM_SCENE: PackedScene = preload("res://rooms/_errorRoom.tscn")

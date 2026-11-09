@@ -9,6 +9,9 @@ height = 8.0
 
 [node name="PlayerCharacter" type="CharacterBody2D" unique_id=1585843019]
 z_index = 1500
+floor_stop_on_slope = false
+floor_max_angle = 1.0471976
+floor_snap_length = 2.0
 script = ExtResource("1_2jmuu")
 doDebugLabel = true
 metadata/_custom_type_script = "uid://b1oltsy4d53w5"

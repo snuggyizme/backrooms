@@ -58,14 +58,41 @@ func _process(_Δ: float) -> void:
 	
 	# Make new rooms
 	for roomCoord: Vector2i in roomCoordsNeeded:
+		var chunkRng := RandomNumberGenerator.new()
+		chunkRng.seed = hash(worldSeed * roomCoord)
+		
+		var left: Room = loadedRooms.get(roomCoord + Vector2i.UP)
+		var right: Room = loadedRooms.get(roomCoord + Vector2i.RIGHT)
+		var above: Room = loadedRooms.get(roomCoord + Vector2i.DOWN)
+		var below: Room = loadedRooms.get(roomCoord + Vector2i.LEFT)
+		
 		var validConnections: Array[Vector4i] = getValidConnections(
-			loadedRooms.get(roomCoord + Vector2i.UP),
-			loadedRooms.get(roomCoord + Vector2i.RIGHT),
-			loadedRooms.get(roomCoord + Vector2i.DOWN),
-			loadedRooms.get(roomCoord + Vector2i.LEFT),
+			left, right, above, below
 		)
-		var connections: Vector4i = validConnections[rng.randi() % validConnections.size()]
-		var roomScene: PackedScene = roomCache[connections][rng.randi() % roomCache[connections].size()]
+		
+		if validConnections.size() == 0:
+			var errorRoom: ErrorRoom = C.ERR_ROOM_SCENE.instantiate()
+			
+			var vec := Vector4i(NAN, NAN, NAN, NAN)
+			
+			if left != null:
+				vec.x = left.connections.y
+			if right != null:
+				vec.y = right.connections.x
+			if above != null:
+				vec.z = above.connections.w
+			if below != null:
+				vec.w = below.connections.z
+				
+			errorRoom.setError(vec)
+			
+			errorRoom.global_position = roomCoord * C.DIMENSION * C.TILE_DIMENSION
+			add_child(errorRoom)
+			loadedRooms[roomCoord] = errorRoom
+			continue
+		
+		var connections: Vector4i = validConnections[chunkRng.randi() % validConnections.size()]
+		var roomScene: PackedScene = roomCache[connections][chunkRng.randi() % roomCache[connections].size()]
 		var room: Room = roomScene.instantiate()
 		room.global_position = roomCoord * C.DIMENSION * C.TILE_DIMENSION
 		add_child(room)

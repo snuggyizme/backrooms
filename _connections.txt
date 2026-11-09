@@ -1,0 +1,9 @@
+KEY ------------------------------------------
+"XY = D"
+X = value / length of vector
+Y = horizontal (x) / vertical (y) / either (a)
+----------------------------------------------
+
+0a = none
+1x = 6 wide centred hallway
+1y = 2 wide centred shaft

@@ -15,9 +15,10 @@ var roomCache: Dictionary[Vector4i, Array] # Dictionary[Vector4i, Array[PackedSc
 # Vector4i.z: Top           #
 # Vector4i.w: Bottom        #
 # ------------------------- #
-# 0: No connection          #
-# 1: Hallway connection     #
-# 2: Wide open connection   #
+# See _connections.txt for  #
+# information about what    #
+# the value of x/y/z/w      #
+# represents :3             #
 # ------------------------- #
 
 

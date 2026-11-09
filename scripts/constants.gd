@@ -21,4 +21,4 @@ const JUMP_HEIGHT: float = 85.0
 const GRAVITY: float = 170.0
 const AIR_X_MAX_SPEED_INCREASE: float = 1.25
 const OVERSPEED_DECEL: float = 300.0
-const FLY_SPEED: float = 300.0
+const FLY_SPEED: float = 600.0

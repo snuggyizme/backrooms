@@ -3,9 +3,11 @@
 [ext_resource type="Script" uid="uid://b1oltsy4d53w5" path="res://scripts/playerCharacter.gd" id="1_2jmuu"]
 [ext_resource type="Texture2D" uid="uid://kowaljtxexwg" path="res://sprites/programmerArt/pga_guy.png" id="2_qn7b7"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_avyua"]
-radius = 3.0
-height = 8.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qp2yk"]
+size = Vector2(6, 9)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_avyua"]
+size = Vector2(6, 4)
 
 [node name="PlayerCharacter" type="CharacterBody2D" unique_id=1585843019]
 z_index = 1500
@@ -19,10 +21,6 @@ metadata/_custom_type_script = "uid://b1oltsy4d53w5"
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=227520983]
 texture = ExtResource("2_qn7b7")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=661794541]
-position = Vector2(0, 2)
-shape = SubResource("CapsuleShape2D_avyua")
-
 [node name="Camera2D" type="Camera2D" parent="." unique_id=775139107]
 position_smoothing_enabled = true
 
@@ -33,3 +31,13 @@ offset_right = 137.0
 offset_bottom = -10.0
 horizontal_alignment = 1
 vertical_alignment = 2
+
+[node name="CollisionShapeStanding" type="CollisionShape2D" parent="." unique_id=661794541]
+position = Vector2(0, 1.5)
+shape = SubResource("RectangleShape2D_qp2yk")
+debug_color = Color(0.5324172, 0.4145301, 0.9948574, 0.41960785)
+
+[node name="CollisionShapeSliding" type="CollisionShape2D" parent="." unique_id=1216570667]
+position = Vector2(0, 4)
+shape = SubResource("RectangleShape2D_avyua")
+debug_color = Color(0.23301879, 0.63783914, 0, 0.41960785)

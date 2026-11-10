@@ -1,5 +1,17 @@
 class_name WorldController extends Node
 
+enum Dir { LEFT, RIGHT, UP, DOWN }
+
+const DIMENSION := Vector2i(32, 24)
+const TILE_DIMENSION := Vector2i.ONE * 16
+const RENDER_DISTANCE_OFFSETS: Array[Vector2i] = [
+	Vector2i(-1, -1), Vector2i(+0, -1), Vector2i(+1, -1),
+	Vector2i(-1, +0), Vector2i(+0, +0), Vector2i(+1, +0),
+	Vector2i(-1, +1), Vector2i(+0, +1), Vector2i(+1, +1),
+]
+const ROOM_DIR: String = "res://rooms/"
+const ERR_ROOM_SCENE: PackedScene = preload("res://rooms/_errorRoom.tscn")
+
 @export var player: PlayerCharacter
 
 var worldSeed: int
@@ -23,20 +35,20 @@ var roomCache: Dictionary[Vector4i, Array] # Dictionary[Vector4i, Array[PackedSc
 
 
 func _ready() -> void:
-	cacheRoomConnections(true, false, true)
+	cacheRoomConnections(false, false, true)
 	randomizeSeed()
 
 func _process(_Δ: float) -> void:
 	# Get player position
 	var playerPos: Vector2 = player.global_position
 	var playerRoomPos := Vector2i(
-		floori(playerPos.x / (C.DIMENSION.x * C.TILE_DIMENSION.x)),
-		floori(playerPos.y / (C.DIMENSION.y * C.TILE_DIMENSION.y)),
+		floori(playerPos.x / (DIMENSION.x * TILE_DIMENSION.x)),
+		floori(playerPos.y / (DIMENSION.y * TILE_DIMENSION.y)),
 	)
 	
 	# Get rooms around player
 	var roomCoordsWanted: Array[Vector2i] = []
-	for offset: Vector2i in C.RENDER_DISTANCE_OFFSETS:
+	for offset: Vector2i in RENDER_DISTANCE_OFFSETS:
 		roomCoordsWanted.append(playerRoomPos + offset)
 	
 	# Get rooms we need ( fuck Godot's wuss typing, I have to do Array here )
@@ -59,42 +71,43 @@ func _process(_Δ: float) -> void:
 	# Make new rooms
 	for roomCoord: Vector2i in roomCoordsNeeded:
 		var chunkRng := RandomNumberGenerator.new()
-		chunkRng.seed = hash(worldSeed * roomCoord)
+		chunkRng.seed = hash("%d,%d,%d" % [ worldSeed, roomCoord.x, roomCoord.y ])
 		
-		var left: Room = loadedRooms.get(roomCoord + Vector2i.UP)
-		var right: Room = loadedRooms.get(roomCoord + Vector2i.RIGHT)
-		var above: Room = loadedRooms.get(roomCoord + Vector2i.DOWN)
-		var below: Room = loadedRooms.get(roomCoord + Vector2i.LEFT)
+		var roomAbove: Room = loadedRooms.get(roomCoord + Vector2i.UP)
+		var roomRight: Room = loadedRooms.get(roomCoord + Vector2i.RIGHT)
+		var roomBelow: Room = loadedRooms.get(roomCoord + Vector2i.DOWN)
+		var roomLeft: Room = loadedRooms.get(roomCoord + Vector2i.LEFT)
 		
 		var validConnections: Array[Vector4i] = getValidConnections(
-			left, right, above, below
+			roomAbove, roomRight, roomBelow, roomLeft,
 		)
 		
 		if validConnections.size() == 0:
-			var errorRoom: ErrorRoom = C.ERR_ROOM_SCENE.instantiate()
+			var errorRoom: ErrorRoom = ERR_ROOM_SCENE.instantiate()
 			
 			var vec := Vector4i(NAN, NAN, NAN, NAN)
 			
-			if left != null:
-				vec.x = left.connections.y
-			if right != null:
-				vec.y = right.connections.x
-			if above != null:
-				vec.z = above.connections.w
-			if below != null:
-				vec.w = below.connections.z
+			if roomLeft != null:
+				vec.x = roomLeft.connections.y
+			if roomRight != null:
+				vec.y = roomRight.connections.x
+			if roomAbove != null:
+				vec.z = roomAbove.connections.w
+			if roomBelow != null:
+				vec.w = roomBelow.connections.z
 				
 			errorRoom.setError(vec)
 			
-			errorRoom.global_position = roomCoord * C.DIMENSION * C.TILE_DIMENSION
+			errorRoom.global_position = roomCoord * DIMENSION * TILE_DIMENSION
 			add_child(errorRoom)
 			loadedRooms[roomCoord] = errorRoom
+			print("{WorldController}: Had to make error room for conenctions: ", vec)
 			continue
 		
 		var connections: Vector4i = validConnections[chunkRng.randi() % validConnections.size()]
 		var roomScene: PackedScene = roomCache[connections][chunkRng.randi() % roomCache[connections].size()]
 		var room: Room = roomScene.instantiate()
-		room.global_position = roomCoord * C.DIMENSION * C.TILE_DIMENSION
+		room.global_position = roomCoord * DIMENSION * TILE_DIMENSION
 		add_child(room)
 		loadedRooms[roomCoord] = room
 
@@ -105,7 +118,7 @@ func randomizeSeed() -> void:
 	rng.seed = worldSeed
 
 func cacheRoomConnections(useFileName: bool = false, addHidden: bool = false, debugPrint: bool = false) -> void:
-	var dir := DirAccess.open(C.ROOM_DIR)
+	var dir := DirAccess.open(ROOM_DIR)
 	dir.list_dir_begin()
 	
 	for path: String in dir.get_files():
@@ -116,26 +129,27 @@ func cacheRoomConnections(useFileName: bool = false, addHidden: bool = false, de
 			continue
 		
 		# Get scene
-		var packed: PackedScene = load(C.ROOM_DIR + path)
+		var packed: PackedScene = load(ROOM_DIR + path)
 		
 		# Get connections
-		var connections: Vector4i
-		if useFileName:
-			var s: String = path.substr(0, 4)
-			connections = Vector4i( # Surely a better way? This is ugly.
-				s[0].to_int(),
-				s[1].to_int(),
-				s[2].to_int(),
-				s[3].to_int(),
-			)
-		else:
+		var s: String = path.substr(0, 4)
+		var connections := Vector4i( # Surely a better way? This is ugly.
+			s[0].to_int(),
+			s[1].to_int(),
+			s[2].to_int(),
+			s[3].to_int(),
+		)
+		if not useFileName:
 			# Get data and free ( hate this typing thing )
 			var temp: Room = packed.instantiate()
 			
 			if debugPrint:
 				print("{WorldController}: Instantiated room ", temp.name)
 			
-			connections = temp.connections
+			if connections != temp.connections:
+				print("{WorldController}: Vec4 connections != filename connections in room: ", path)
+			
+			
 			temp.free()
 		
 		# Add to dictionary

@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://78bn73di6s1o"]
+
+[ext_resource type="Script" uid="uid://bhj2yn1dh40np" path="res://scripts/hotbar.gd" id="1_4qkdb"]
+[ext_resource type="PackedScene" uid="uid://dhdybjd68pkp4" path="res://scenes/hotbarContainer.tscn" id="1_yj1xu"]
+
+[node name="Hotbar" type="Control" unique_id=1080140364]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 426.0
+offset_bottom = 240.0
+script = ExtResource("1_4qkdb")
+offsetTransformTrans = 2
+offsetTransformOffset = -5.0
+offsetTransformTimeA = 0.05
+offsetTransformTimeB = 0.05
+
+[node name="CC" type="HBoxContainer" parent="." unique_id=1413541203]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -74.0
+offset_top = -12.0
+offset_right = 74.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="HotbarContainer1" parent="CC" unique_id=2031326530 instance=ExtResource("1_yj1xu")]
+layout_mode = 2
+
+[node name="HotbarContainer2" parent="CC" unique_id=2065874751 instance=ExtResource("1_yj1xu")]
+layout_mode = 2
+
+[node name="HotbarContainer3" parent="CC" unique_id=29622375 instance=ExtResource("1_yj1xu")]
+layout_mode = 2
+
+[node name="HotbarContainer4" parent="CC" unique_id=1879401444 instance=ExtResource("1_yj1xu")]
+layout_mode = 2
+
+[node name="HotbarContainer5" parent="CC" unique_id=1867274622 instance=ExtResource("1_yj1xu")]
+layout_mode = 2
+
+[node name="HotbarContainer6" parent="CC" unique_id=877028252 instance=ExtResource("1_yj1xu")]
+layout_mode = 2
+
+[node name="HotbarContainer7" parent="CC" unique_id=1494633344 instance=ExtResource("1_yj1xu")]
+layout_mode = 2
+
+[node name="HotbarContainer8" parent="CC" unique_id=1339698127 instance=ExtResource("1_yj1xu")]
+layout_mode = 2
+
+[node name="HotbarContainer9" parent="CC" unique_id=2101471616 instance=ExtResource("1_yj1xu")]
+layout_mode = 2
+
+[node name="HotbarContainer10" parent="CC" unique_id=415831714 instance=ExtResource("1_yj1xu")]
+layout_mode = 2

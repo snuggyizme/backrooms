@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://dgxhc1fvlyw7s"]
+
+[ext_resource type="Script" uid="uid://bfw40ju0otw0f" path="res://scripts/procgen/worldController.gd" id="1_eva31"]
+[ext_resource type="PackedScene" uid="uid://c0mlw2cydkj6s" path="res://scenes/playerCharacter.tscn" id="2_umjhr"]
+
+[node name="240pContent" type="Node2D" unique_id=1588800163]
+
+[node name="WorldController" type="Node" parent="." unique_id=335140767 node_paths=PackedStringArray("player")]
+script = ExtResource("1_eva31")
+player = NodePath("../PlayerCharacter")
+metadata/_custom_type_script = "uid://bfw40ju0otw0f"
+
+[node name="PlayerCharacter" parent="." unique_id=1585843019 instance=ExtResource("2_umjhr")]
+position = Vector2(213, 120)

@@ -1,7 +1,6 @@
 class_name PlayerCharacter extends CharacterBody2D
 
 # eventually will have stat mods from items and such...
-# ^ why this has  consts instead of exported base values
 
 const WALK_SPEED: float = 255.0
 const DRAG: float = 250.0
@@ -18,33 +17,46 @@ const ERR_ROOM_SCENE: PackedScene = preload("res://rooms/_errorRoom.tscn")
 const MAX_FALL_ON_WALL: float = 17.5
 const MAX_FALL_ON_WALL_ENFORCEMENT_STRENGTH: float = 0.2
 const WALL_JUMP_SPEED := Vector2(95.0, 125.0)
-const SLIDE_DIRATION: float = 0.7
+const SLIDE_DURATION: float = 1.1
 const SLIDE_MIN_SPEED: float = 50.0
 const SLIDE_DRAG: float = 60.0
-const SLIDE_ACCEL: float = 150.0
+const SLIDE_ACCEL: float = 25.0
+const SLIDE_X_MAX_SPEED_INCREASE: float = 1.3
+const SLIDE_BOOST: float = 25.0
+const SLIDE_TRANS := Tween.TransitionType.TRANS_CIRC
+const SLIDE_EASE := Tween.EaseType.EASE_OUT
+const SLIDE_TWEEN_TIME: float = 0.6
+const EXTRA_SLIDE_FRICTION: float = 5.0
+const EXTRA_SLIDE_FRICTION_TIME: float = 0.7
+const FASTFALL_SPEED: float = 2.6
+const SLIDE_DOWNWARD_PUSH: float = 15.5
 
-@export var doDebugLabel: bool
+@export var debug: bool
 
 var fly: bool = false
 var isSliding: bool = false
 var slideTimer: float = 0.0
+var slideBoost: float = 0.0
+var slideTween: Tween
 
-@onready var debugLabel: Label = $"DebugLabel"
+@onready var speedLabel: Label = $"DebugInfo/SpeedLabel"
+@onready var slidingIndicator: Sprite2D = $"DebugInfo/SlidingIndicator"
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("tab"):
 		print("{PlayerCharacter}: Toggle fly")
 		fly = not fly
 
-func _process(Δ: float) -> void:
+func _physics_process(Δ: float) -> void:
 	if fly:
 		processFly(Δ)
 	else:
 		processMovement(Δ)
 	
 	# UNRELATED TO MOVEMENT:
-	if doDebugLabel:
-		debugLabel.text = str(floori(velocity.x))
+	if debug:
+		speedLabel.text = str(floori(velocity.x))
+		slidingIndicator.visible = ( isSliding )
 
 func processMovement(Δ: float) -> void:
 	var input: Vector2 = Input.get_vector("a", "d", "w", "s")
@@ -56,7 +68,20 @@ func processMovement(Δ: float) -> void:
 	
 	var drag: float = DRAG if ( onFloor ) else AIR_DRAG
 	
-	match [( input.x != null ), ( isSliding )]:
+	if isSliding:
+		slideTimer -= Δ
+		#velocity.y = SLIDE_DOWNWARD_PUSH
+		
+		if slideTimer <= EXTRA_SLIDE_FRICTION_TIME:
+			var extraFriction: float = (
+				EXTRA_SLIDE_FRICTION * (slideTimer / EXTRA_SLIDE_FRICTION_TIME)
+			)
+			velocity.x = move_toward(velocity.x, 0.0, extraFriction)
+	
+	if ( slideTimer <= 0.0 ) or !( input.y >= 0 ) or !( onFloor ):
+		isSliding = false
+	
+	match [ ( input.x != 0.0 ), ( isSliding ) ]:
 		[true, false]:
 			# Horizontal control when not sliding
 			velocity.x += WALK_SPEED * input.x * Δ
@@ -71,17 +96,32 @@ func processMovement(Δ: float) -> void:
 			velocity.x = move_toward(velocity.x, 0.0, SLIDE_DRAG * Δ)
 	
 	if onFloor:
+		velocity.x = move_toward(velocity.x, 0.0, -(slideBoost))
 		if justJumped:
 			# Jump
 			print("{PlayerController}: Jumped")
 			var runupBonus: float = minf(abs(velocity.x) / RUNUP_MAX, 1.0) * RUNUP_STRENGTH + 1.0
 			velocity.y -= JUMP_HEIGHT * runupBonus
-		elif justSlid and absf(velocity.x) >= SLIDE_MIN_SPEED:
+		elif (
+			( justSlid ) and
+			( absf(velocity.x) >= SLIDE_MIN_SPEED ) and
+			( not isSliding )
+		):
+			# Slide
+			print("{PlayerController}: Started slide")
 			isSliding = true
-			slideTimer = SLIDE_DIRATION
+			slideTimer = SLIDE_DURATION
+			slideBoost = 25.0
+			
+			if slideTween != null:
+				slideTween.kill()
+			slideTween = create_tween()
+			slideTween.set_trans(SLIDE_TRANS).set_ease(SLIDE_EASE)
+			slideTween.tween_property(self, "slideBoost", 0.0, SLIDE_TWEEN_TIME)
 	else:
 		# Gravity
-		velocity.y += GRAVITY * Δ
+		var mult: float = FASTFALL_SPEED if ( input.y > 0.0 ) else 1.0
+		velocity.y += GRAVITY * mult * Δ
 	
 	if onWall:
 		velocity.y = lerpf(
@@ -94,7 +134,11 @@ func processMovement(Δ: float) -> void:
 			velocity.y = -WALL_JUMP_SPEED.y
 	
 	# Limiting
-	var airIncrease: float = 1.0 if (onFloor) else AIR_X_MAX_SPEED_INCREASE
+	var airIncrease: float = 1.0
+	if not onFloor:
+		airIncrease = AIR_X_MAX_SPEED_INCREASE
+	elif isSliding:
+		airIncrease = SLIDE_X_MAX_SPEED_INCREASE
 	var xLimit: float = MAX_WALK_SPEED * airIncrease
 	var clampedX = clampf(velocity.x, -1.0 * xLimit, xLimit)
 	velocity.x = move_toward(velocity.x, clampedX, OVERSPEED_DECEL * Δ)

@@ -1,0 +1,6 @@
+[gd_resource type="StyleBoxTexture" format=3 uid="uid://57kdi2ahbc4m"]
+
+[ext_resource type="Texture2D" uid="uid://crqk1iv0crve8" path="res://sprites/programmerArt/pga_hotbarContainer.png" id="1_jktyy"]
+
+[resource]
+texture = ExtResource("1_jktyy")

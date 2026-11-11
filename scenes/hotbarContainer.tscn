@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://dhdybjd68pkp4"]
+
+[ext_resource type="StyleBox" uid="uid://57kdi2ahbc4m" path="res://resources/hotbarDeselected.tres" id="1_1yhf6"]
+
+[node name="HotbarContainer" type="PanelContainer" unique_id=2031326530]
+custom_minimum_size = Vector2(12, 12)
+custom_maximum_size = Vector2(12, 12)
+offset_right = 12.0
+offset_bottom = 12.0
+offset_transform_enabled = true
+theme_override_styles/panel = ExtResource("1_1yhf6")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1878792223]
+custom_minimum_size = Vector2(8, 8)
+custom_maximum_size = Vector2(8, 8)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+expand_mode = 2

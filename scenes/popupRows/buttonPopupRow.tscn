@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://defu4bf2mj05p"]
+
+[node name="ButtonPopupRow" type="PanelContainer" unique_id=549687198]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Button" type="Button" parent="." unique_id=1126349182]
+layout_mode = 2

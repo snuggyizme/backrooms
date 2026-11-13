@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://rfncgx33gsx3"]
+
+[node name="TextPopupRow" type="PanelContainer" unique_id=549687198]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="." unique_id=854217820]
+layout_mode = 2
+text = "x"

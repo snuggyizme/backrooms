@@ -1,6 +1,5 @@
 ## Controls and creates popups (e.g. item tooltips, block functionalities)
 class_name PopupMaster extends Control
-
 signal popupButtonPressed(popup, buttonTag: StringName)
 
 const POPUP_SCENE: PackedScene = preload("res://scenes/popup.tscn")

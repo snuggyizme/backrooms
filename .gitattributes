@@ -1,0 +1,4 @@
+
+# Linguist
+addons/** linguist-vendored
+*.html -linguist-detectable

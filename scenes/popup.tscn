@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dggjdu8e7tlq5"]
+
+[ext_resource type="FontFile" uid="uid://d3xrspiiursvi" path="res://fonts/DMMono-Medium.ttf" id="1_4ebxx"]
+
+[node name="PanelContainer" type="PanelContainer" unique_id=1176774340]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="." unique_id=1041499690]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_4ebxx")
+theme_override_font_sizes/font_size = 9
+text = "Popup"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=676087297]
+layout_mode = 2
+metadata/_edit_lock_ = true

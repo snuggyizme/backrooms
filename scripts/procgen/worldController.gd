@@ -144,7 +144,7 @@ func cacheRoomConnections(useFileName: bool = false, addHidden: bool = false, de
 			var temp: Room = packed.instantiate()
 			
 			if debugPrint:
-				print("{WorldController}: Instantiated room ", temp.name)
+				print("{WorldController}: Instantiated room ", path.get_file())
 			
 			if connections != temp.connections:
 				print("{WorldController}: Vec4 connections != filename connections in room: ", path)

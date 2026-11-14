@@ -2,6 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://dgxhc1fvlyw7s" path="res://scenes/240pContent.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://78bn73di6s1o" path="res://scenes/hotbar.tscn" id="2_0wfyh"]
+[ext_resource type="Script" uid="uid://c1ffn5ehmbwe0" path="res://scripts/popup/popupMaster.gd" id="3_sugp2"]
+[ext_resource type="Script" uid="uid://b877bjqbajpn0" path="res://scripts/popup/popupTester.gd" id="4_jyhfs"]
 
 [sub_resource type="Environment" id="Environment_o5qli"]
 background_mode = 3
@@ -27,3 +29,14 @@ render_target_update_mode = 4
 [node name="240pContent" parent="ViewportContainer/240p" unique_id=1588800163 instance=ExtResource("1_o5qli")]
 
 [node name="Hotbar" parent="." unique_id=1080140364 instance=ExtResource("2_0wfyh")]
+
+[node name="PopupMaster" type="Control" parent="." unique_id=1504180738]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("3_sugp2")
+metadata/_custom_type_script = "uid://c1ffn5ehmbwe0"
+
+[node name="TestPopup" type="Node2D" parent="." unique_id=1692765288]
+script = ExtResource("4_jyhfs")

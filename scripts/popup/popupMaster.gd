@@ -1,10 +1,16 @@
+@icon("res://addons/at-icons/control/chess_king.svg")
+
 ## Controls and creates popups (e.g. item tooltips, block functionalities)
 class_name PopupMaster extends Control
-signal popupButtonPressed(popup, buttonTag: StringName)
+
+signal popupButtonPressed(popupTag: StringName, buttonTag: StringName)
 
 const POPUP_SCENE: PackedScene = preload("res://scenes/popup.tscn")
 
 var items: Dictionary[StringName, Node]
+
+func _ready() -> void:
+	Refs.popupMaster = self
 
 func create(
 	def: PopupDefinition,
@@ -12,8 +18,10 @@ func create(
 	tag: StringName,
 	rowTags: Array[StringName]
 ) -> void:
+	print("{PopupMaster}: Called create()")
+	
 	var popup: PanelContainer = POPUP_SCENE.instantiate()
-	var rowAddPoint: VBoxContainer = popup.get_child(0)
+	var rowAddPoint: VBoxContainer = popup.get_child(1)
 	
 	for i: int in range(def.rows.size()):
 		var rowDef: PopupRow = def.rows[i]
@@ -30,6 +38,7 @@ func create(
 	var fitPos: Vector2 = findFittingPos(pos, popup.size)
 	popup.global_position = fitPos
 	
+	print("{PopupMaster}: Adding popup to scene")
 	add_child(popup)
 
 func findFittingPos(pos: Vector2, popupSize: Vector2) -> Vector2:

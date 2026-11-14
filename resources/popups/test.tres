@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="PopupDefinition" format=3 uid="uid://gslpxmdecb3p"]
+
+[ext_resource type="Script" uid="uid://c0w3b0061s10k" path="res://scripts/popup/popupRows/popupRow.gd" id="1_c4ajb"]
+[ext_resource type="Script" uid="uid://ubs4athp0172" path="res://scripts/popup/popup.gd" id="2_qgk1e"]
+[ext_resource type="Script" uid="uid://br7oooactd40q" path="res://scripts/popup/popupRows/textPopupRow.gd" id="2_xm4f5"]
+[ext_resource type="Script" uid="uid://shrgaw1r4b6n" path="res://scripts/popup/popupRows/buttonPopupRow.gd" id="3_xm4f5"]
+
+[sub_resource type="Resource" id="Resource_jyhfs"]
+script = ExtResource("2_xm4f5")
+colour = Color(1, 1, 1, 1)
+text = "Testing text"
+metadata/_custom_type_script = "uid://br7oooactd40q"
+
+[sub_resource type="Resource" id="Resource_fboj2"]
+script = ExtResource("1_c4ajb")
+dark = true
+metadata/_custom_type_script = "uid://c0w3b0061s10k"
+
+[sub_resource type="Resource" id="Resource_65hoe"]
+script = ExtResource("3_xm4f5")
+metadata/_custom_type_script = "uid://shrgaw1r4b6n"
+
+[resource]
+script = ExtResource("2_qgk1e")
+title = "Testing"
+rows = Array[ExtResource("1_c4ajb")]([SubResource("Resource_jyhfs"), SubResource("Resource_fboj2"), SubResource("Resource_65hoe")])
+metadata/_custom_type_script = "uid://ubs4athp0172"

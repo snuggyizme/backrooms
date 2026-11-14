@@ -6,4 +6,5 @@ offset_bottom = 40.0
 
 [node name="Label" type="Label" parent="." unique_id=854217820]
 layout_mode = 2
+theme_override_font_sizes/font_size = 11
 text = "x"

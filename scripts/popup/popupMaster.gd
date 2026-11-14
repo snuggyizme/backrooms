@@ -35,11 +35,11 @@ func create(
 		
 		rowAddPoint.add_child(row)
 	
-	var fitPos: Vector2 = findFittingPos(pos, popup.size)
-	popup.global_position = fitPos
-	
 	print("{PopupMaster}: Adding popup to scene")
 	add_child(popup)
+	
+	var fitPos: Vector2 = findFittingPos(pos, popup.size)
+	popup.global_position = fitPos
 
 func findFittingPos(pos: Vector2, popupSize: Vector2) -> Vector2:
 	var viewportRect: Rect2 = get_viewport_rect()

@@ -6,6 +6,7 @@ class_name PopupMaster extends Control
 signal popupButtonPressed(popupTag: StringName, buttonTag: StringName)
 
 const POPUP_SCENE: PackedScene = preload("res://scenes/popup.tscn")
+const DARK_PANEL_STYLEBOX: StyleBoxFlat = null
 
 var items: Dictionary[StringName, Node]
 
@@ -28,8 +29,14 @@ func create(
 		var row: PanelContainer = rowDef.getScene().instantiate()
 		var rowTag: StringName = rowTags[i]
 		
+		if rowDef.dark:
+			row.add_theme_stylebox_override("panel", DARK_PANEL_STYLEBOX)
+		
 		if rowDef is TextPopupRow:
-			items[rowTag] = row.get_node("Label")
+			var label: Label = row.get_node("Label")
+			items[rowTag] = label
+			
+			
 		elif rowDef is ButtonPopupRow:
 			items[rowTag] = row.get_node("Button")
 		

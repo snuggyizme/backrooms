@@ -1,5 +1,11 @@
 [gd_scene format=3 uid="uid://lvjkrobwbr70"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jyhfs"]
+bg_color = Color(0.3106171, 0.31061712, 0.310617, 1)
+border_width_left = 2
+border_color = Color(0.35156286, 0.35156295, 0.35156265, 1)
+
 [node name="PopupRow" type="PanelContainer" unique_id=549687198]
 offset_right = 40.0
 offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_jyhfs")
